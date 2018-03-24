@@ -36,7 +36,6 @@ passport.use(new GoogleStrategy({
     // search if a user exists with googleId = profile.id
     User.findOne(userObject).then(existingUser => {
         if (existingUser) {
-            console.log('found existing user::', existingUser);
             // we already have a record with a given profile.id
             // callback to passport with the existingUser object
             done(null, existingUser);
