@@ -5,10 +5,20 @@ module.exports = (app) => {
         scope: ['profile', 'email']
     }));
 
-    app.get('/auth/google/callback', passport.authenticate('google'));
+    // authenticate user using pasport.authenticate middleware
+    // after redirect user to /surveys
+    app.get('/auth/google/callback',
+        passport.authenticate('google'),
+        (req, res) => {
+            // redirect user to our survey dashboard
+            res.redirect('/surveys');
+        }
+    );
     app.get('/api/logout', (req, res) => {
+        // logout user using passport logout function
         req.logout();
-        res.send(req.user);
+        // redirect user back to homepage
+        res.redirect('/');
     });
     app.get('/api/current_user', (req, res) => {
         res.send(req.user);
