@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
 // require in keys from config directory
 const keys = require('./config/keys');
@@ -19,6 +20,9 @@ mongoose.connect(keys.mongoURI);
 // new express app instance
 const app = express();
 
+// use bodyParser to parse body and assign to req.body
+app.use(bodyParser.json());
+
 // tell express to use cookies
 app.use(cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -29,8 +33,11 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// require authRoutes with express app chaining
+
+// require authRoutes with express app as input parameter
 require('./routes/authRoutes')(app);
+// require billingRoutes with express app as input parameter
+require('./routes/billingRoutes')(app);
 
 // constant getting PORT for process.env
 // use 5000 for development default
