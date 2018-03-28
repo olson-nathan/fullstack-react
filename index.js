@@ -39,6 +39,18 @@ require('./routes/authRoutes')(app);
 // require billingRoutes with express app as input parameter
 require('./routes/billingRoutes')(app);
 
+if (process.env.NODE_ENV === 'production') {
+    // express will serve up production assets (eg. main.js)
+    app.use(express.static('client/build'));
+
+    // express will serve up index.html file
+    // only if route is not recognized
+    const path = require('path');
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
+
 // constant getting PORT for process.env
 // use 5000 for development default
 const PORT = process.env.PORT || 5000;
